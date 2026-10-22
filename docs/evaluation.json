@@ -1,0 +1,43 @@
+{
+  "kind": "synthetic-client-call-count-evaluation",
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "workload": {
+    "concurrency": 100,
+    "waveTimesMs": [
+      0,
+      100,
+      60000
+    ],
+    "totalConfigRequests": 300,
+    "parametersPerRead": 3,
+    "ttlMs": 60000
+  },
+  "baseline": {
+    "description": "isolated loader per request, no shared cache",
+    "totalCalls": 300,
+    "callsPerWave": [
+      100,
+      100,
+      100
+    ]
+  },
+  "cached": {
+    "description": "one shared loader per warm process",
+    "totalCalls": 2,
+    "callsPerWave": [
+      1,
+      0,
+      1
+    ]
+  },
+  "callReductionPercent": 99.33,
+  "limitations": [
+    "Mock SSM only; no AWS requests or credentials.",
+    "One process, controlled clock, no network latency, retry or OIDC measurement.",
+    "API-call reduction is not a measured cost, throughput or end-to-end latency improvement."
+  ]
+}
