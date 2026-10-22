@@ -4,7 +4,7 @@ import { createClient } from '../src/aws.js';
 import { KEYS, parseEnvFile, settings } from '../src/env-file.js';
 
 async function main() {
-  const config = parseEnvFile(await readFile('ENV.local.txt', 'utf8'));
+  const config = parseEnvFile(await readFile('ENV.txt', 'utf8'));
   const { prefix } = settings();
   const overwrite = process.argv.includes('--overwrite');
   if (!process.argv.includes('--apply')) {
@@ -29,3 +29,4 @@ main().catch(() => {
   console.error('Upload failed. Check local configuration, AWS permissions, and existing parameter names. Some writes may have completed.');
   process.exitCode = 1;
 });
+

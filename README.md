@@ -4,8 +4,8 @@ Small Node.js service for local development and Vercel. Application configuratio
 
 ## Layout
 
-- `ENV.txt`: committed example only; never enter real secrets here.
-- `ENV.local.txt`: ignored local values uploaded to SSM.
+- `ENV.example.txt`: committed dummy template.
+- `ENV.txt`: ignored local values uploaded to SSM (`ENV.local.txt` is also ignored for migration).
 - `.env.example`: bootstrap configuration; copy to ignored `.env.local`.
 - `scripts/push-env.js`: explicit, dry-run-first uploader.
 - `src/config.js`: batched retrieval, validation, bounded requests, in-memory TTL cache and concurrent request deduplication.
@@ -18,10 +18,10 @@ Small Node.js service for local development and Vercel. Application configuratio
 ```sh
 npm ci
 cp .env.example .env.local
-cp ENV.txt ENV.local.txt
+cp ENV.example.txt ENV.txt
 ```
 
-Edit `.env.local` with your development AWS profile, SSM region and prefix. Edit `ENV.local.txt` with your own configuration. Authenticate with AWS CLI SSO, for example `aws sso login --profile myapp-development`. Configure the SSO profile first with `aws configure sso` if necessary. Do not use production credentials for development.
+Edit `.env.local` with your development AWS profile, SSM region and prefix. Edit `ENV.txt` with your own configuration. Authenticate with AWS CLI SSO, for example `aws sso login --profile myapp-development`. Configure the SSO profile first with `aws configure sso` if necessary. Do not use production credentials for development.
 
 The ENV format is one KEY=value per line. Blank lines and full-line comments are accepted. Double-quoted values use JSON escaping. No interpolation, inline comments, multiline strings, shell execution or unknown keys. Do not `source` this file. Add application keys explicitly in `src/env-file.js` and update IAM resource lists when extending the example.
 
@@ -87,3 +87,4 @@ Tests cover parsing, literal values, validation, concurrency, cache expiry, refr
 - https://vercel.com/docs/oidc/aws
 - https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html
 - https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/ssm/
+
