@@ -36,7 +36,7 @@ npm run env:push -- --apply
 npm run env:push -- --apply --overwrite
 ```
 
-Dry run validates locally and makes no AWS requests. Existing parameters are not overwritten by default. Writes are sequential and not transactional: a failed upload can leave partial updates. For coordinated multi-value changes, create a new versioned prefix, upload fully, validate, then switch the deployment's prefix. Remove local plaintext values when no longer needed.
+Dry run validates locally and makes no AWS requests. Unknown/duplicate flags are rejected; `--overwrite` requires `--apply`. For an existing local file use `npm run env:push -- --file ENV.local.txt`. Existing parameters are not overwritten by default. Writes are sequential and not transactional: a failed upload can leave partial updates. For coordinated multi-value changes, create a new versioned prefix, upload fully, validate, then switch the deployment's prefix. Remove local plaintext values when no longer needed.
 
 A custom KMS key additionally requires appropriately scoped `kms:Encrypt` (upload) and `kms:Decrypt` (runtime), and an authorizing key policy; supplied IAM templates assume the default key. Never give runtime the provisioner's permissions.
 
