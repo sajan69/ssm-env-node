@@ -6,7 +6,7 @@ import { createHandler } from '../src/handler.js';
 
 const text = 'APP_NAME="demo"\nDATABASE_URL=postgresql://u:p@localhost/db\nAPI_KEY="$(do-not-execute)"';
 const config = parseEnvFile(text);
-const response = () => ({ Parameters: KEYS.map(key => ({ Name: `/demo/${key}`, Value: config[key] })) });
+const response = () => ({ Parameters: KEYS.map(key => ({ Name: `/demo/${key}`, Type: 'SecureString', Value: config[key] })) });
 
 test('ENV parser preserves literal shell syntax and quoted # and =', () => {
   assert.equal(config.API_KEY, '$(do-not-execute)');
@@ -61,3 +61,4 @@ test('handler rejects writes and sanitizes failures',async()=>{
   const failed=mockResponse(); await handler({method:'GET'},failed);
   assert.equal(failed.statusCode,503); assert.ok(!failed.body.includes('secret-value'));
 });
+

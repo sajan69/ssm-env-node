@@ -1,5 +1,15 @@
 export const KEYS = Object.freeze(['APP_NAME', 'DATABASE_URL', 'API_KEY']);
 
+export function validatePrefix(prefix) {
+  // Reserve one hierarchy level for the allowlisted parameter key.
+  if (typeof prefix !== 'string' || prefix.length > 512 ||
+      !/^\/[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9_.-]+)*$/.test(prefix)) throw new Error('Invalid SSM_PREFIX');
+  const segments = prefix.slice(1).split('/');
+  if (segments.length > 14 || /^(aws|ssm)/i.test(segments[0]) ||
+      segments.some(segment => segment === '.' || segment === '..')) throw new Error('Invalid SSM_PREFIX');
+  return prefix;
+}
+
 export function validateConfig(config) {
   for (const key of KEYS) {
     if (typeof config[key] !== 'string' || !config[key].trim()) {
@@ -38,7 +48,8 @@ export function settings(env = process.env) {
   const region = env.SSM_REGION;
   const prefix = env.SSM_PREFIX;
   if (!region || !/^[a-z]{2}(?:-[a-z]+)+-\d+$/.test(region)) throw new Error('Invalid SSM_REGION');
-  if (!prefix || !/^\/[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9_.-]+)*$/.test(prefix)) throw new Error('Invalid SSM_PREFIX');
+  validatePrefix(prefix);
   if (env.VERCEL && !env.AWS_ROLE_ARN) throw new Error('AWS_ROLE_ARN is required on Vercel');
   return { region, prefix };
 }
+

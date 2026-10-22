@@ -66,8 +66,8 @@ AWS_ROLE_ARN=arn:aws:iam::123456789012:role/myapp-production
 
 ## Runtime behavior and limitations
 
-- One GetParameters call loads the three named values; values are returned as an immutable config object, not assigned to global `process.env`.
-- Cached for 60 seconds per warm process. Each cold instance fetches independently. Failed refreshes return 503 rather than stale secrets.
+- One GetParameters call loads the three named SecureString values; plaintext, duplicate, foreign or missing parameters fail closed. There is no hierarchy listing or pagination with this fixed schema (GetParameters accepts up to 10 names). When extending beyond 10 keys, implement explicit batching and update the IAM policy/tests first. Values are returned as an immutable config object, not assigned to global `process.env`.
+- Cached for 60 seconds per warm process using a monotonic clock. Prefixes are limited to 512 characters and 14 levels, excluding reserved namespaces and dot segments. Each cold instance fetches independently. Failed refreshes return 503 rather than stale secrets.
 - SDK attempts are bounded to three, with connection/request timeouts and an 8-second SSM operation abort signal. Credential acquisition involves additional OIDC/STS work and the SSM signal is not a universal deadline for that exchange. Configure the Vercel function duration for your application.
 - Rotated secrets can remain cached until expiry. Existing database pools may also need reconnection; this demo does not manage pools or perform rotation.
 - No values are logged, returned, bundled into frontend code, or exported via an endpoint. Never add `NEXT_PUBLIC_`/`VITE_` secret exports.
