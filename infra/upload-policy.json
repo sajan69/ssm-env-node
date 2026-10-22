@@ -1,0 +1,16 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ssm:PutParameter"
+      ],
+      "Resource": [
+        "arn:aws:ssm:ap-southeast-2:123456789012:parameter/myapp/production/APP_NAME",
+        "arn:aws:ssm:ap-southeast-2:123456789012:parameter/myapp/production/DATABASE_URL",
+        "arn:aws:ssm:ap-southeast-2:123456789012:parameter/myapp/production/API_KEY"
+      ]
+    }
+  ]
+}

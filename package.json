@@ -1,0 +1,19 @@
+{
+  "name": "ssm-env-node",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node --env-file=.env.local src/server.js",
+    "test": "node --test",
+    "env:push": "node --env-file=.env.local scripts/push-env.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-ssm": "^3.1155.0",
+    "@smithy/node-http-handler": "^4.12.1",
+    "@vercel/oidc-aws-credentials-provider": "^3.3.15"
+  }
+}
