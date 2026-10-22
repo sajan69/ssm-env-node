@@ -9,7 +9,8 @@
   "scripts": {
     "start": "node --env-file=.env.local src/server.js",
     "test": "node --test",
-    "env:push": "node --env-file=.env.local scripts/push-env.js"
+    "env:push": "node --env-file=.env.local scripts/push-env.js",
+    "demo": "node scripts/demo.js"
   },
   "dependencies": {
     "@aws-sdk/client-ssm": "^3.1155.0",

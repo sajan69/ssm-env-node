@@ -1,10 +1,23 @@
-import { createServer } from 'node:http';
-import handler from '../api/index.js';
+import { createClient } from './aws.js';
+import { createConfigLoader } from './config.js';
+import { settings } from './env-file.js';
+import { startService } from './local-server.js';
 
-createServer((req, res) => {
-  if (req.url?.split('?')[0] !== '/api') {
-    res.writeHead(404).end();
-    return;
+let client;
+try {
+  const { prefix } = settings();
+  const port = process.env.PORT === undefined ? 3000 : Number(process.env.PORT);
+  client = createClient();
+  const server = await startService({ getConfig: createConfigLoader({ client, prefix }), port });
+  console.log(`Listening at http://127.0.0.1:${server.address().port}/api`);
+  for (const signal of ['SIGINT', 'SIGTERM']) {
+    process.once(signal, () => {
+      server.close(() => { client.destroy(); });
+    });
   }
-  void handler(req, res);
-}).listen(3000, '127.0.0.1', () => console.log('Listening at http://localhost:3000/api'));
+} catch {
+  client?.destroy();
+  console.error('startup_failed: configuration unavailable or port could not be bound');
+  process.exitCode = 1;
+}
+

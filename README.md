@@ -13,6 +13,15 @@ Small Node.js service for local development and Vercel. Application configuratio
 - `infra/`: exact-resource IAM policy templates; replace account, region, paths, team and project placeholders.
 - `test/`: credential-free tests using injected clients.
 
+## Credential-free demo
+
+```sh
+npm ci
+npm run demo
+```
+
+This runs a real local HTTP server on an ephemeral loopback port with an explicitly injected mock SSM client, asserts 200/405/503/recovery behavior and exits. It needs no AWS account or `.env.local` and never contacts AWS. This mock is available only in the separate demo entry point; the real service never silently falls back to it.
+
 ## Local setup (Node 22 or 24)
 
 ```sh
@@ -42,8 +51,11 @@ A custom KMS key additionally requires appropriately scoped `kms:Encrypt` (uploa
 
 ```sh
 npm start
+# In a second terminal:
 curl http://localhost:3000/api
 ```
+
+Local startup validates required SSM values before listening. `PORT` defaults to 3000; later refresh failures return 503. Vercel initializes on the first request and returns a sanitized 503 if configuration fails.
 
 Expected: `{"status":"ok","configurationLoaded":true}`. No secret or app configuration values are returned. The example validates credentials/configuration but does not actually connect to a database or external API.
 
