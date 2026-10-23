@@ -1,30 +1,29 @@
 # Project progress
 
-Status: complete (bounded offline portfolio demo, 23 October 2026). Target roles: software engineer and cloud/security analyst.
+Status: offline implementation complete. Live AWS/Vercel access requires account-specific verification.
 
-## Bounded finish line
+## Implemented
 
-- [x] Node service, OIDC adapter and exact-resource IAM examples exist.
-- [x] Real ENV.txt is ignored; dummy template is clearly named.
-- [x] Uploader is independently tested, defaults to dry run and rejects unsafe flags.
-- [x] Configuration reads reject malformed responses and invalid cache settings.
-- [x] Local server validates configuration before listening; offline demo is reproducible.
-- [x] Reproducible evaluation, threat model and interview guide are documented.
-- [x] Local final checks pass and portfolio readiness is assessed honestly.
+- [x] Node.js service, Vercel OIDC adapter and exact-resource IAM examples.
+- [x] Ignored local ENV files and a clearly named dummy template.
+- [x] Dry-run uploader with explicit apply/overwrite controls and partial-failure handling.
+- [x] Encrypted SSM response validation, schema checks and cache boundary handling.
+- [x] Configuration validation before the local server listens.
+- [x] Credential-free HTTP demo with outage and recovery scenarios.
+- [x] Reproducible cache evaluation and CI on Node 22/24.
+- [x] Security model, setup instructions and technical limitations.
 
-Live AWS/Vercel deployment is optional and requires account-specific validation.
-No automatic rotation, database pool management or general secrets platform is in scope.
+## Verification
 
-## Verified progress
+24 tests cover configuration, upload controls, response validation and HTTP behavior.
+The offline demo checks 200 readiness, 405 on unsupported methods, 503 during an expired-cache outage, and recovery to 200.
+The controlled evaluation made 2 mock SSM calls versus 300 isolated-loader calls across 300 configuration requests.
+See the [evaluation method](README.md#cache-evaluation), [recorded output](docs/evaluation.json) and [CI](https://github.com/sajan69/ssm-env-node/actions/workflows/ci.yml).
 
-Baseline inspected: upstream 1639675 (22 October); existing service/OIDC functionality was retained.
-Six scoped changes: ignored-secret migration, tested uploader, strict loader boundaries,
-fail-fast service/demo, deterministic evaluation/CI artifacts, and portfolio/security documentation.
-Local verification: 24/24 tests; demo 200/405/503/200; production npm audit reported 0 vulnerabilities.
-Evaluation: 300 config requests, 300 isolated-loader calls versus 2 shared-loader calls, mock-only.
-See docs/PORTFOLIO.md for method, limitations, resume candidates and learning steps.
+## Optional integration checks
 
-Next action: inspect the final GitHub CI run before treating both Node versions as validated.
-If final CI fails, fix this project before switching. Otherwise the bounded work is complete;
-do not generate filler commits. A successor repository requires an available creation capability
-or a user-created repository; prepare its scope separately rather than adding unrelated code here.
+- Validate edited IAM and custom KMS policies in a development account.
+- Verify actual Vercel OIDC issuer, audience and subject claims.
+- Confirm environment isolation and runtime read-only permissions.
+
+Automatic rotation, database pool management and a general-purpose secrets platform are outside the current scope.

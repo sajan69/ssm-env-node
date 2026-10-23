@@ -1,6 +1,6 @@
 # Security model and architecture
 
-This is a bounded configuration-management demo for software engineering and cloud security portfolios. It is not a general secrets platform or evidence of a production deployment.
+This document describes the configuration service's trust boundaries, access controls, failure behavior and limitations. Live AWS/Vercel integration requires account-specific verification.
 
 ## Data flow and boundaries
 

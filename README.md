@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/sajan69/ssm-env-node/actions/workflows/ci.yml/badge.svg)](https://github.com/sajan69/ssm-env-node/actions/workflows/ci.yml)
 
-Portfolio demo for **software engineering and cloud security**. Bounded offline implementation complete; live AWS/Vercel integration remains account-specific and unverified. See [security model](docs/SECURITY.md), [evaluation and interview guide](docs/PORTFOLIO.md), and [progress](ROADMAP.md).
+The offline example is implemented and tested; live AWS/Vercel integration requires account-specific verification. See the [security model](docs/SECURITY.md), [cache evaluation](#cache-evaluation), and [progress](ROADMAP.md).
 
 Small Node.js service for local development and Vercel. Application configuration lives in SSM Parameter Store; Vercel authenticates with OIDC and a read-only IAM role. No EC2, Lambda, S3, or SSM agent required. IAM, STS (OIDC), and KMS support authentication and encryption.
 
@@ -100,13 +100,16 @@ npm audit --omit=dev --audit-level=high
 
 24 tests cover parsing, validation, encrypted response boundaries, uploader dry-run/write controls, partial failures, concurrency, TTL expiry, startup refusal, real HTTP routing, outage recovery and output sanitization. A deterministic evaluation made 2 mock SSM calls versus 300 isolated-loader calls across 300 config requests; this is not a production cost/latency claim. CI publishes evaluation JSON artifacts. CI runs on Node 22 and 24 without AWS credentials. Live AWS permissions, Vercel OIDC and connectivity must be verified after configuring your accounts; offline tests do not prove those integrations.
 
+## Cache evaluation
+
+The controlled workload sends 300 configuration requests in three waves of 100, at simulated times 0, 100 and 60,000 ms. The baseline creates an isolated loader for every request; the comparison shares one loader with a 60-second TTL.
+
+Mock SSM calls were 300 for isolated loaders and 2 for the shared loader, with 1, 0 and 1 calls across the cached waves. See [recorded output](docs/evaluation.json) or run `npm run evaluate`.
+
+This measures client-call counts in one process with a controlled clock. It does not measure AWS latency, billing, throughput, retries or credential acquisition. All fixtures are synthetic; live AWS/Vercel access was not tested.
+
 ## References
 
 - https://vercel.com/docs/oidc/aws
 - https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html
 - https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/ssm/
-
-
-## Assistance and scope
-
-This portfolio iteration was built and verified with an AI coding assistant under the repository owner's direction. See the learning guide before making first-person resume claims. No AWS resources were deployed, no real secrets were used, and no production usage is claimed.
