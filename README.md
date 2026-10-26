@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/sajan69/ssm-env-node/actions/workflows/ci.yml/badge.svg)](https://github.com/sajan69/ssm-env-node/actions/workflows/ci.yml)
 
-The offline example is implemented and tested; live AWS/Vercel integration requires account-specific verification. See the [security model](docs/SECURITY.md), [cache evaluation](#cache-evaluation), and [progress](ROADMAP.md).
+Live AWS/Vercel integration requires account-specific verification. See the [security model](docs/SECURITY.md) and [cache evaluation](#cache-evaluation).
 
 Small Node.js service for local development and Vercel. Application configuration lives in SSM Parameter Store; Vercel authenticates with OIDC and a read-only IAM role. No EC2, Lambda, S3, or SSM agent required. IAM, STS (OIDC), and KMS support authentication and encryption.
 
